@@ -35,10 +35,12 @@ class CTR(object):
     PARSE_URL_PARAMS = True
     # 是否解析 post data 参数
     PARSE_POST_DATA = True
+    # 显示解析的URL
+    DISP_PARSE_URL = False
     # 显示解析异常
     DISP_PARSE_ERROR = False
     # 是否添加请求数据导出代码
-    ENABLE_RESPONSE_EXPORT_CODE = True
+    ENABLE_RESPONSE_EXPORT_CODE = False
     # 制表符
     TAB = "    "
 
@@ -128,7 +130,9 @@ class CTR(object):
             if "curl" not in text:
                 continue
             try:
-                requests_objs.append(Parser().parse(text))
+                req = Parser().parse(text)
+                requests_objs.append(req)
+                CTR.DISP_PARSE_URL and print(f"[{req['method']}] -> ({req['url']})")
             except: 
                 if CTR.DISP_PARSE_ERROR:
                     print("-----------" * 4)
@@ -190,6 +194,22 @@ class CTR(object):
 
 # Test
 if __name__ == "__main__":
-    with open(sys.argv[1], 'r', encoding="utf-8") as f:
-        CTR.exporter(CTR.translator(f.read()), "./out.py")
+
+    import argparse
+    # 构建命令行解析器
+    parser = argparse.ArgumentParser(description="将curl命令文本(str)转换成req对象(dict)")
+    # 添加命令行参数
+    parser.add_argument("curl_filepath", type=str, help="curl文件输入路径")
+    parser.add_argument("-o", "--out", type=str, default="./out.py", help="req代码输出路径")
+    parser.add_argument("-res", "--res_out", action="store_true", help="添加res数据导出代码")
+    parser.add_argument("-du", "--disp_url", action="store_true", help="显示解析的URL")
+    parser.add_argument("-de", "--disp_err", action="store_true", help="显示解析异常")
+    # 解析参数
+    args = parser.parse_args()
+    # 调用CURL转换器
+    CTR.DISP_PARSE_URL = args.disp_url
+    CTR.DISP_PARSE_ERROR = args.disp_err
+    CTR.ENABLE_RESPONSE_EXPORT_CODE = args.res_out
+    with open(args.curl_filepath, 'r', encoding="utf-8") as f:
+        CTR.exporter(CTR.translator(f.read()), args.out)
 

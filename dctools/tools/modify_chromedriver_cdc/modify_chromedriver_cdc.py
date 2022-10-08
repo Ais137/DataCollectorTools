@@ -56,8 +56,10 @@ def randomization_chromedriver_cdc(chromedriver_path, n=5, cover=False, disp=Fal
         print(f"[error]: {traceback.format_exc()}")
 
 
-if __name__ ==  "__main__":
-    
+# 执行器
+from ..cmdline import ToolCommand
+@ToolCommand.cmd("m_cdc", "修改chromedriver_$cdc特征值")
+def __run(args=None):
     # 构建命令行解析器
     parser = argparse.ArgumentParser(description="修改chromedriver_$cdc特征值")
     # 添加命令行参数
@@ -66,6 +68,11 @@ if __name__ ==  "__main__":
     parser.add_argument("-c", "--cover", action="store_true", help="覆盖原始文件")
     parser.add_argument("-d", "--disp", action="store_true", help="显示修改过程")
     # 解析参数
-    args = parser.parse_args()
+    args = parser.parse_args(args)
     # 修改特征值
     randomization_chromedriver_cdc(args.chromedriver_path, args.n, cover=args.cover, disp=args.disp)
+
+
+if __name__ ==  "__main__":
+    __run()
+    

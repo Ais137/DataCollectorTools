@@ -5,7 +5,6 @@
 
 
 import re
-import sys
 import json
 import traceback
 
@@ -192,9 +191,10 @@ class CTR(object):
             f.write(out_code)
 
 
-# Test
-if __name__ == "__main__":
-
+# 执行器
+from ..cmdline import ToolCommand
+@ToolCommand.cmd("CTR", "curl命令转换器")
+def __run(args=None):
     import argparse
     # 构建命令行解析器
     parser = argparse.ArgumentParser(description="将curl命令文本(str)转换成req对象(dict)")
@@ -205,11 +205,17 @@ if __name__ == "__main__":
     parser.add_argument("-du", "--disp_url", action="store_true", help="显示解析的URL")
     parser.add_argument("-de", "--disp_err", action="store_true", help="显示解析异常")
     # 解析参数
-    args = parser.parse_args()
+    args = parser.parse_args(args)
     # 调用CURL转换器
     CTR.DISP_PARSE_URL = args.disp_url
     CTR.DISP_PARSE_ERROR = args.disp_err
     CTR.ENABLE_RESPONSE_EXPORT_CODE = args.res_out
     with open(args.curl_filepath, 'r', encoding="utf-8") as f:
         CTR.exporter(CTR.translator(f.read()), args.out)
+
+
+# Test
+if __name__ == "__main__":
+    __run()
+    
 

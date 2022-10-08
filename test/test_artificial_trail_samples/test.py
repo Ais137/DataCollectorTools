@@ -8,7 +8,7 @@ import time
 import base64
 import numpy as np
 
-from artificial_trail_samples import ArtificialTrailSamples
+from dctools.ats import ArtificialTrailSamples
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -16,7 +16,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 # 导入轨迹样本库
-ats = ArtificialTrailSamples().load("./ts.json")
+ats = ArtificialTrailSamples().load()
 
 # 构建selenium driver
 driver = webdriver.Chrome()

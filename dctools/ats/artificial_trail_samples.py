@@ -57,6 +57,8 @@
     ts[i] = ts[i] + dn + di
 """
 
+
+import os
 import json
 import random
 
@@ -215,12 +217,13 @@ class ArtificialTrailSamples(object):
         self.trail_interpolator = trail_interpolator
 
     # 导入轨迹样本
-    def load(self, trail_samples_path):
+    def load(self, trail_samples_path=None):
         """
         @func: 导入轨迹样本
         @params: 
             * trail_samples_path(str): 轨迹样本库路径
         """
+        trail_samples_path = trail_samples_path or os.path.join(os.path.dirname(__file__), "ts.json")
         with open(trail_samples_path, "r") as f:
             self.__trail_samples = [ArtificialTrailSamples.Trail(
                 offset = ts["offset"],
@@ -491,6 +494,6 @@ if __name__ ==  "__main__":
 
     # --------------------------------------------
     # 生成轨迹
-    ts = ArtificialTrailSamples().load("./ts.json").build(x_offset=325, t_offset=3000).display()
+    ts = ArtificialTrailSamples().load().build(x_offset=325, t_offset=3000).display()
 
 

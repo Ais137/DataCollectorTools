@@ -5,7 +5,7 @@
 
 
 import requests
-from requests_extender import RequestsExtender
+from dctools.utils.requests_extender import RequestsExtender
 
 
 # 加载扩展
